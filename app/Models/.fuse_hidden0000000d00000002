@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
+use App\Traits\HasTenant;
+
+class Member extends Model
+{
+    use HasTenant;
+
+    protected $fillable = [
+        'user_id','code','first_name','last_name','email','phone',
+        'birth_date','gender','address','emergency_contact','emergency_phone',
+        'photo','plan_id','membership_start','membership_end','status','notes',
+    ];
+
+    protected $casts = [
+        'birth_date'       => 'date',
+        'membership_start' => 'date',
+        'membership_end'   => 'date',
+    ];
+
+    public function plan()      { return $this->belongsTo(Plan::class); }
+    public function payments()  { return $this->hasMany(Payment::class); }
+    public function attendance(){ return $this->hasMany(Attendance::class); }
+    public function user()      { return $this->belongsTo(User::class); }
+
+    public function getFullNameAttribute() { return $this->first_name . ' ' . $this->last_name; }
+    public function getInitialsAttribute()  { return strtoupper(substr($this->first_name,0,1).substr($this->last_name,0,1)); }
+}

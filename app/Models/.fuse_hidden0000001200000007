@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTenant;
+
+class Plan extends Model
+{
+    use HasTenant;
+
+    protected $fillable = ['name','description','price','duration_days','features','color','is_featured','status'];
+
+    protected $casts = ['is_featured' => 'boolean', 'status' => 'boolean'];
+
+    public function members()  { return $this->hasMany(Member::class); }
+    public function payments() { return $this->hasMany(Payment::class); }
+
+    public function getFeaturesArrayAttribute()
+    {
+        if (!$this->features) return [];
+        $decoded = json_decode($this->features, true);
+        return is_array($decoded) ? $decoded : [];
+    }
+}

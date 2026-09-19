@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTenant;
+
+class Attendance extends Model
+{
+    use HasTenant;
+
+    protected $table = 'attendance';
+
+    protected $fillable = ['gymnasium_id','member_id','class_id','check_in','check_out','notes'];
+
+    protected $casts = [
+        'check_in'  => 'datetime',
+        'check_out' => 'datetime',
+    ];
+
+    public function member()   { return $this->belongsTo(Member::class); }
+    public function gymClass() { return $this->belongsTo(GymClass::class, 'class_id'); }
+}

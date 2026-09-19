@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTenant;
+
+class Trainer extends Model
+{
+    use HasTenant;
+
+    protected $fillable = ['gymnasium_id',
+        'user_id','name','email','phone','speciality','bio','photo','hire_date','salary','status',
+    ];
+
+    protected $casts = ['hire_date' => 'date'];
+
+    public function user()    { return $this->belongsTo(User::class); }
+    public function classes() { return $this->hasMany(GymClass::class); }
+}

@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
+use App\Traits\HasTenant;
+
+class GymClass extends Model
+{
+    use BelongsToTenant;
+
+    use HasTenant;
+
+    protected $table = 'gym_classes';
+
+    protected $fillable = [
+        'name','description','trainer_id','capacity','duration_minutes',
+        'schedule_day','schedule_time','room','color','status',
+    ];
+
+    public function trainer()     { return $this->belongsTo(Trainer::class); }
+    public function enrollments() { return $this->hasMany(ClassEnrollment::class, 'class_id'); }
+    public function attendance()  { return $this->hasMany(Attendance::class, 'class_id'); }
+}
